@@ -21,18 +21,30 @@ const Login = () => {
       return;
     }
     setLoading(true);
+    const userData = { email, password, name };
     try {
-      const res = await axios.post(
-        "http://localhost:4000/jwt",
-        { email, name },
+      const resp = await axios.post(
+        `http://localhost:4000/login/validation`,
+        userData,
         { withCredentials: true }
       );
-      if (res.data.success) {
-        toast.success("Login successful");
-        setUser({ email, name });
-      } else {
-        toast.error("Login failed");
+      if (resp?.data?.status === 403) {
+        return toast.error("Please enter a valid email and password");
       }
+      if (resp?.data?.status === 201 || resp?.data?.status === 200) {
+        const res = await axios.post(
+          "http://localhost:4000/jwt",
+          { email, name },
+          { withCredentials: true }
+        );
+        if (res.data.success) {
+          toast.success(resp?.data?.message);
+          router.push("/");
+          setUser({ email, name });
+        }
+      }
+      console.log(resp?.data);
+      console.log(resp?.data?.status);
     } catch (error) {
       toast.error("Invalid credentials or server error");
     } finally {

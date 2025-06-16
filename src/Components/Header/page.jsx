@@ -15,7 +15,6 @@ const Header = () => {
     );
     setUser(null);
   };
-  console.log(user);
 
   return (
     <div className="howCardShadow bg-white">
@@ -45,9 +44,11 @@ const Header = () => {
                     className="btn btn-ghost btn-circle avatar"
                   >
                     <div className="w-10 rounded-full">
-                      <img
-                        alt="Tailwind CSS Navbar component"
-                        src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                      <Image
+                        src={"/user4.png"}
+                        width={40}
+                        height={40}
+                        alt="profile"
                       />
                     </div>
                   </div>
@@ -72,7 +73,7 @@ const Header = () => {
                 </div>
               ) : (
                 <Link href="/api/login">
-                  <button className="rounded-md bg-[#57c1ee] py-2 px-4 text-sm lg:text-base font-medium text-white focus:outline-none data-[hover]:bg-black/30 data-[focus]:outline-1 data-[focus]:outline-white">
+                  <button className="rounded-md bg-[#57c1ee] py-2 px-4 text-sm lg:text-base font-medium text-white focus:outline-none data-[hover]:bg-black/30 data-[focus]:outline-1 data-[focus]:outline-white cursor-pointer">
                     Login
                   </button>
                 </Link>
