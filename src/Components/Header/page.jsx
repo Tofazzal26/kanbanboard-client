@@ -3,10 +3,12 @@ import { AuthKanabanBoard } from "@/KanabanProvider/KanabanProvider";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React, { useContext } from "react";
 
 const Header = () => {
   const { user, setUser, loading } = useContext(AuthKanabanBoard);
+  const path = usePathname();
   const handleLogout = async () => {
     await axios.post(
       "http://localhost:4000/logout",
@@ -33,6 +35,13 @@ const Header = () => {
                 <h2 className="mt-[3px]">Kanaban Board</h2>
               </button>
             </Link>
+          </div>
+          <div>
+            <button className="text-lg">
+              <Link href="/" className={path === "/" ? "text-[#57c1ee]" : ""}>
+                Home
+              </Link>
+            </button>
           </div>
           <div>
             <div>

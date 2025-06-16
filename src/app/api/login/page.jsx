@@ -16,6 +16,10 @@ const Login = () => {
     const email = event.target.email.value;
     const name = event.target.name.value;
     const password = event.target.password.value;
+    const isValidEmail = /^.+@.+\..+$/.test(email);
+    if (!isValidEmail) {
+      return toast.error("Invalid email format");
+    }
     if (!email || !password) {
       toast.error("Email and password are required");
       return;
@@ -52,15 +56,13 @@ const Login = () => {
     }
   };
 
-  // console.log(user, "user");
-
   return (
     <div className="lg:pt-[100px] pt-5">
       <div className="flex justify-center items-center">
         <div className="border-2 rounded-md border-[#e5e5e5] bg-white">
           <div className="md:px-[60px] px-[20px] pb-[20px] md:pb-14 ">
             <h1 className="text-center text-lg md:text-2xl my-4 md:my-10">
-              LOGIN
+              Use for Login or Signup
             </h1>
             <form onSubmit={handleSubmit}>
               <div>
@@ -69,6 +71,7 @@ const Login = () => {
                 <input
                   type="text"
                   name="name"
+                  required
                   className="md:py-[10px] py-2 mt-2 mb-4 px-3 w-full md:w-[400px] md:px-5 bg-[#f3f4f7] border-[1px] border-[#e5e5e5] outline-none rounded-none"
                 />
               </div>
@@ -78,6 +81,7 @@ const Login = () => {
                 <input
                   type="text"
                   name="email"
+                  required
                   className="md:py-[10px] py-2 mt-2 mb-4 px-3 w-full md:w-[400px] md:px-5 bg-[#f3f4f7] border-[1px] border-[#e5e5e5] outline-none rounded-none"
                 />
               </div>
@@ -87,6 +91,7 @@ const Login = () => {
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
+                  required
                   className="md:py-[10px] py-2 mt-2 px-3 w-full md:w-[400px] md:px-5 bg-[#f3f4f7] border-[1px]  outline-none border-[#e5e5e5] rounded-none"
                 />
                 {showPassword ? (
@@ -126,17 +131,11 @@ const Login = () => {
               </h2>
             </div>
             <div className="mt-4 flex justify-center items-center gap-2">
-              <button
-                onClick={() => handleGoogleLogin("google")}
-                className="flex px-4 py-2 justify-center cursor-pointer items-center gap-2 border-2 border-[#e5e5e5]"
-              >
+              <button className="flex px-4 py-2 justify-center cursor-pointer items-center gap-2 border-2 border-[#e5e5e5]">
                 <Image src="/google.png" alt="google" width={30} height={30} />
                 Continue to Google
               </button>
-              <button
-                onClick={() => handleGithubLogin("github")}
-                className="flex px-4 py-2 cursor-pointer justify-center items-center gap-2 border-2 border-[#e5e5e5]"
-              >
+              <button className="flex px-4 py-2 cursor-pointer justify-center items-center gap-2 border-2 border-[#e5e5e5]">
                 <Image src="/github.png" alt="google" width={30} height={30} />
                 Continue to Github
               </button>

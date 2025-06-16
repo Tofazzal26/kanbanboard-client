@@ -88,7 +88,7 @@ const MainTask = () => {
         <Modal />
       </div>
       <DragDropContext onDragEnd={handleDragEnd}>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-3 lg:gap-5 mt-4">
           {Object.entries(columns).map(([statusKey, title]) => (
             <Droppable droppableId={statusKey} key={statusKey}>
               {(provided) => (

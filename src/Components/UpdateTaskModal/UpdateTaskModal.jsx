@@ -5,9 +5,11 @@ import { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FolderPen, Trash } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+import { AuthKanabanBoard } from "@/KanabanProvider/KanabanProvider";
 const UpdateTaskModal = ({ taskId }) => {
   let [isOpen, setIsOpen] = useState(false);
   const [task, setTask] = useState(null);
+  const { AllDataRefetch } = useContext(AuthKanabanBoard);
 
   function open() {
     setIsOpen(true);
@@ -18,12 +20,24 @@ const UpdateTaskModal = ({ taskId }) => {
     setTask(null);
   }
 
-  const handleTaskUpdate = (e) => {
+  const handleTaskUpdate = async (e) => {
     e.preventDefault();
     const title = e.target.title.value;
     const description = e.target.description.value;
     const dueDate = e.target.dueDate.value;
-    console.log({ title, description, dueDate });
+    const allData = { title, description, dueDate };
+    try {
+      const resp = await axios.patch(
+        `http://localhost:4000/task/singleTaskUpdate/${taskId}`,
+        allData
+      );
+      if (resp?.data?.status === 200) {
+        AllDataRefetch();
+        toast.success("Task Update Successfully");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
