@@ -24,7 +24,7 @@ const Modal = () => {
     const allData = { title, description, dueDate };
     try {
       const resp = await axios.post(
-        `http://localhost:4000/task/taskAdd`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/task/taskAdd`,
         allData
       );
       if (resp?.data?.status === 200) {

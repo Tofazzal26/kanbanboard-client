@@ -13,9 +13,12 @@ const KanabanProvider = ({ children }) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get("http://localhost:4000/userInfo", {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/userInfo`,
+          {
+            withCredentials: true,
+          }
+        );
         setUser(res.data.user);
       } catch (err) {
         if (err.response && err.response.status === 401) {
@@ -33,7 +36,9 @@ const KanabanProvider = ({ children }) => {
   const { refetch: AllDataRefetch, data: AllTask = [] } = useQuery({
     queryKey: ["AllTask"],
     queryFn: async () => {
-      const resp = await axios.get("http://localhost:4000/task/allTask");
+      const resp = await axios.get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/task/allTask`
+      );
       return resp?.data?.data;
     },
   });

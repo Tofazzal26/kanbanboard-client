@@ -11,7 +11,7 @@ const Header = () => {
   const path = usePathname();
   const handleLogout = async () => {
     await axios.post(
-      "http://localhost:4000/logout",
+      `${process.env.NEXT_PUBLIC_BASE_URL}/logout`,
       {},
       { withCredentials: true }
     );

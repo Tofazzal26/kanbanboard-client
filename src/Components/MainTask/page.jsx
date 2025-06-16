@@ -39,7 +39,7 @@ const MainTask = () => {
 
     try {
       await axios.patch(
-        `http://localhost:4000/task/taskStatus/${draggableId}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/task/taskStatus/${draggableId}`,
         { status: newStatus },
         { withCredentials: true }
       );
@@ -64,7 +64,7 @@ const MainTask = () => {
       }).then(async (result) => {
         if (result.isConfirmed) {
           const response = await axios.delete(
-            `http://localhost:4000/task/taskDelete/${id}`
+            `${process.env.NEXT_PUBLIC_BASE_URL}/task/taskDelete/${id}`
           );
           if (response?.data?.status === 200) {
             AllDataRefetch();

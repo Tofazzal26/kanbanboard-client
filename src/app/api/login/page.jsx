@@ -28,7 +28,7 @@ const Login = () => {
     const userData = { email, password, name };
     try {
       const resp = await axios.post(
-        `http://localhost:4000/login/validation`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/login/validation`,
         userData,
         { withCredentials: true }
       );
@@ -37,7 +37,7 @@ const Login = () => {
       }
       if (resp?.data?.status === 201 || resp?.data?.status === 200) {
         const res = await axios.post(
-          "http://localhost:4000/jwt",
+          `${process.env.NEXT_PUBLIC_BASE_URL}/jwt`,
           { email, name },
           { withCredentials: true }
         );

@@ -28,7 +28,7 @@ const UpdateTaskModal = ({ taskId }) => {
     const allData = { title, description, dueDate };
     try {
       const resp = await axios.patch(
-        `http://localhost:4000/task/singleTaskUpdate/${taskId}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/task/singleTaskUpdate/${taskId}`,
         allData
       );
       if (resp?.data?.status === 200) {
@@ -45,7 +45,7 @@ const UpdateTaskModal = ({ taskId }) => {
       const fetchTask = async () => {
         try {
           const res = await axios.get(
-            `http://localhost:4000/task/singleTask/${taskId}`
+            `${process.env.NEXT_PUBLIC_BASE_URL}/task/singleTask/${taskId}`
           );
           setTask(res?.data?.data);
         } catch (err) {
