@@ -7,6 +7,7 @@ import { toast } from "react-hot-toast";
 import Modal from "../Modal/Modal";
 import { FolderPen, Trash } from "lucide-react";
 import Swal from "sweetalert2";
+import UpdateTaskModal from "../UpdateTaskModal/UpdateTaskModal";
 
 const columns = {
   todo: "To Do",
@@ -129,9 +130,7 @@ const MainTask = () => {
                             >
                               <Trash className="text-red-500" size={20} />
                             </button>
-                            <button className="cursor-pointer">
-                              <FolderPen color="#57c1ee" size={20} />
-                            </button>
+                            <UpdateTaskModal taskId={task?._id} />
                           </div>
                         </div>
                       )}
