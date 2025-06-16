@@ -30,7 +30,7 @@ const KanabanProvider = ({ children }) => {
     fetchUser();
   }, []);
 
-  const { data: AllTask = [] } = useQuery({
+  const { refetch: AllDataRefetch, data: AllTask = [] } = useQuery({
     queryKey: ["AllTask"],
     queryFn: async () => {
       const resp = await axios.get("http://localhost:4000/task/allTask");
@@ -38,9 +38,14 @@ const KanabanProvider = ({ children }) => {
     },
   });
 
-  console.log(AllTask);
-
-  const allData = { user, setUser, loading, setLoading };
+  const allData = {
+    user,
+    setUser,
+    loading,
+    setLoading,
+    AllTask,
+    AllDataRefetch,
+  };
   return (
     <AuthKanabanBoard.Provider value={allData}>
       {children}

@@ -1,28 +1,101 @@
-import { FolderPen, Trash } from "lucide-react";
+"use client";
+import React, { useContext } from "react";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { AuthKanabanBoard } from "@/KanabanProvider/KanabanProvider";
+import axios from "axios";
+import { toast } from "react-hot-toast";
 
-const TaskCard = () => {
+const columns = {
+  todo: "To Do",
+  inProgress: "In Progress",
+  completed: "Completed",
+};
+
+const statusMap = {
+  todo: "todo",
+  inProgress: "in_progress",
+  completed: "completed",
+};
+
+const MainTask = () => {
+  const { AllTask, AllDataRefetch } = useContext(AuthKanabanBoard);
+
+  const groupedTasks = {
+    todo: AllTask?.filter((task) => task.status === "todo"),
+    inProgress: AllTask?.filter((task) => task.status === "in_progress"),
+    completed: AllTask?.filter((task) => task.status === "completed"),
+  };
+
+  const handleDragEnd = async (result) => {
+    const { destination, source, draggableId } = result;
+
+    // Prevent unnecessary updates when dropping in the same column or outside
+    if (!destination || destination.droppableId === source.droppableId) return;
+
+    const newStatus = statusMap[destination.droppableId];
+
+    try {
+      await axios.patch(
+        `http://localhost:4000/task/taskStatus/${draggableId}`,
+        { status: newStatus },
+        { withCredentials: true }
+      );
+      toast.success("Status updated!");
+      AllDataRefetch();
+    } catch (error) {
+      console.error("Update error", error.message);
+      toast.error("Failed to update task.");
+    }
+  };
+
   return (
-    <div>
-      <div className="bg-gray-100 rounded-lg my-6 p-8 shadow-lg">
-        <div className="flex justify-between items-center">
-          <h2 className="text-lg lg:text-xl">Researc Project</h2>
-          <span className="text-gray-600">14-06-2025</span>
+    <div className="container mx-auto p-5">
+      <h2 className="text-2xl font-semibold mb-6">Task Management</h2>
+      {/* Fix: Ensure isCombineEnabled is set correctly inside DragDropContext */}
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {Object.entries(columns).map(([statusKey, title]) => (
+            <Droppable droppableId={statusKey} key={statusKey}>
+              {(provided) => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  className="shadow-lg rounded-lg p-6 bg-white min-h-[300px]"
+                >
+                  <h2 className="text-xl font-bold mb-3">{title}</h2>
+                  {groupedTasks[statusKey]?.map((task, index) => (
+                    <Draggable
+                      key={task._id}
+                      draggableId={task._id}
+                      index={index}
+                    >
+                      {(provided) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          className="p-3 mb-3 rounded-md bg-gray-100 shadow-md cursor-move"
+                        >
+                          <h3 className="font-semibold">{task.title}</h3>
+                          <p className="text-sm text-gray-600">
+                            {task.description}
+                          </p>
+                          <p className="text-xs text-gray-500 mt-1">
+                            Due: {task.dueDate?.split("T")[0]}
+                          </p>
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          ))}
         </div>
-        <h2 className="text-sm lg:text-base mt-2 text-gray-600">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus,
-          ratione!
-        </h2>
-        <div className="flex justify-between items-center mt-2">
-          <button className="cursor-pointer">
-            <Trash className="text-red-500" size={20} />
-          </button>
-          <button className="cursor-pointer">
-            <FolderPen color="#57c1ee" size={20} />
-          </button>
-        </div>
-      </div>
+      </DragDropContext>
     </div>
   );
 };
 
-export default TaskCard;
+export default MainTask;

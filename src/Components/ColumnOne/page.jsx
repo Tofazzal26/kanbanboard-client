@@ -1,16 +1,20 @@
 "use client";
-import { FolderPen, Trash } from "lucide-react";
+import { useDroppable } from "@dnd-kit/core";
 import TaskCard from "./TaskCard";
 
-const ColumnOne = () => {
+const ColumnOne = ({ column, tasks }) => {
+  const { setNodeRef } = useDroppable({
+    id: column.serial_id,
+  });
+
   return (
-    <div>
-      <div>
-        <div className="shadow-lg rounded-lg p-6 bg-white">
-          <h2 className="text-xl lg:text-3xl">To Do</h2>
-          <div>
-            <TaskCard />
-          </div>
+    <div ref={setNodeRef}>
+      <div className="rounded-lg p-6  min-h-[400px]">
+        <h2 className="text-xl lg:text-3xl">{column?.title}</h2>
+        <div>
+          {tasks?.map((task, idx) => (
+            <TaskCard key={idx} task={task} />
+          ))}
         </div>
       </div>
     </div>
