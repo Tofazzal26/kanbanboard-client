@@ -36,7 +36,7 @@ const UpdateTaskModal = ({ taskId }) => {
         toast.success("Task Update Successfully");
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 

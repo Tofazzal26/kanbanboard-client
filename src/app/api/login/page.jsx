@@ -47,8 +47,8 @@ const Login = () => {
           setUser({ email, name });
         }
       }
-      console.log(resp?.data);
-      console.log(resp?.data?.status);
+      // console.log(resp?.data);
+      // console.log(resp?.data?.status);
     } catch (error) {
       toast.error("Invalid credentials or server error");
     } finally {

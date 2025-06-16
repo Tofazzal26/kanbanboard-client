@@ -51,7 +51,7 @@ const MainTask = () => {
   };
 
   const handleDeleteTask = async (id) => {
-    console.log(id);
+    // console.log(id);
     try {
       Swal.fire({
         title: "Are you sure?",
@@ -77,7 +77,7 @@ const MainTask = () => {
         }
       });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 

@@ -31,9 +31,9 @@ const Modal = () => {
         AllDataRefetch();
         toast.success("Task Add Successfully");
       }
-      console.log(resp);
+      // console.log(resp);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 
