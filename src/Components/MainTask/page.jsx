@@ -6,6 +6,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import Modal from "../Modal/Modal";
 import { FolderPen, Trash } from "lucide-react";
+import Swal from "sweetalert2";
 
 const columns = {
   todo: "To Do",
@@ -45,6 +46,37 @@ const MainTask = () => {
     } catch (error) {
       console.error("Update error", error.message);
       toast.error("Failed to update task.");
+    }
+  };
+
+  const handleDeleteTask = async (id) => {
+    console.log(id);
+    try {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You want to Delete",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const response = await axios.delete(
+            `http://localhost:4000/task/taskDelete/${id}`
+          );
+          if (response?.data?.status === 200) {
+            AllDataRefetch();
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your task has been deleted.",
+              icon: "success",
+            });
+          }
+        }
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -91,7 +123,10 @@ const MainTask = () => {
                             {task.description}
                           </p>
                           <div className="flex justify-between items-center mt-2">
-                            <button className="cursor-pointer">
+                            <button
+                              onClick={() => handleDeleteTask(task?._id)}
+                              className="cursor-pointer"
+                            >
                               <Trash className="text-red-500" size={20} />
                             </button>
                             <button className="cursor-pointer">

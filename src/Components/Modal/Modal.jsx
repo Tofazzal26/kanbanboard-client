@@ -27,7 +27,7 @@ const Modal = () => {
         `http://localhost:4000/task/taskAdd`,
         allData
       );
-      if (resp?.data?.status === 201) {
+      if (resp?.data?.status === 200) {
         AllDataRefetch();
         toast.success("Task Add Successfully");
       }
@@ -99,7 +99,7 @@ const Modal = () => {
                       ></textarea>
                     </div>
                     <button
-                      className="rounded-md bg-[#57c1ee] py-2 px-4 text-sm lg:text-base font-medium text-white focus:outline-none data-[hover]:bg-black/30 data-[focus]:outline-1 data-[focus]:outline-white"
+                      className="rounded-md bg-[#57c1ee] py-2 px-4 text-sm lg:text-base font-medium text-white focus:outline-none data-[hover]:bg-black/30 data-[focus]:outline-1 data-[focus]:outline-white cursor-pointer"
                       onClick={close}
                     >
                       Add Task
