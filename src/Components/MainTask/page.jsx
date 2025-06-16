@@ -1,9 +1,11 @@
 "use client";
 import React, { useContext } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd"; // updated import
 import { AuthKanabanBoard } from "@/KanabanProvider/KanabanProvider";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import Modal from "../Modal/Modal";
+import { FolderPen, Trash } from "lucide-react";
 
 const columns = {
   todo: "To Do",
@@ -29,7 +31,6 @@ const MainTask = () => {
   const handleDragEnd = async (result) => {
     const { destination, source, draggableId } = result;
 
-    // যদি ড্রপ না করে বা একই column এ ড্রপ করে
     if (!destination || destination.droppableId === source.droppableId) return;
 
     const newStatus = statusMap[destination.droppableId];
@@ -40,7 +41,6 @@ const MainTask = () => {
         { status: newStatus },
         { withCredentials: true }
       );
-      toast.success("Status updated!");
       AllDataRefetch();
     } catch (error) {
       console.error("Update error", error.message);
@@ -50,24 +50,21 @@ const MainTask = () => {
 
   return (
     <div className="container mx-auto p-5">
-      <h2 className="text-2xl font-semibold mb-6">Task Management</h2>
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-semibold mb-6">Task Management</h2>
+        <Modal />
+      </div>
       <DragDropContext onDragEnd={handleDragEnd}>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-4">
           {Object.entries(columns).map(([statusKey, title]) => (
-            <Droppable
-              droppableId={statusKey}
-              key={statusKey}
-              // isDropDisabled অবশ্যই boolean দিতে হবে,
-              // এখন disabled করছি না তাই false
-              isDropDisabled={false}
-            >
+            <Droppable droppableId={statusKey} key={statusKey}>
               {(provided) => (
                 <div
                   ref={provided.innerRef}
                   {...provided.droppableProps}
                   className="shadow-lg rounded-lg p-6 bg-white min-h-[300px]"
                 >
-                  <h2 className="text-xl font-bold mb-3">{title}</h2>
+                  <h2 className="text-2xl font-bold mb-3">{title}</h2>
                   {groupedTasks[statusKey]?.map((task, index) => (
                     <Draggable
                       key={task._id}
@@ -79,15 +76,28 @@ const MainTask = () => {
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          className="p-3 mb-3 rounded-md bg-gray-100 shadow-md cursor-move"
+                          className="p-5 mb-3 rounded-md bg-gray-100 shadow-md cursor-move"
                         >
-                          <h3 className="font-semibold">{task.title}</h3>
-                          <p className="text-sm text-gray-600">
+                          <div className="flex justify-between items-center">
+                            <h3 className="font-semibold text-lg mt-2">
+                              {task.title}
+                            </h3>
+                            <p className="text-base text-gray-500 mt-1">
+                              Due: {task.dueDate?.split("T")[0]}
+                            </p>
+                          </div>
+
+                          <p className="text-base text-gray-600">
                             {task.description}
                           </p>
-                          <p className="text-xs text-gray-500 mt-1">
-                            Due: {task.dueDate?.split("T")[0]}
-                          </p>
+                          <div className="flex justify-between items-center mt-2">
+                            <button className="cursor-pointer">
+                              <Trash className="text-red-500" size={20} />
+                            </button>
+                            <button className="cursor-pointer">
+                              <FolderPen color="#57c1ee" size={20} />
+                            </button>
+                          </div>
                         </div>
                       )}
                     </Draggable>

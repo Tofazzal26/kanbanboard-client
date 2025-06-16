@@ -1,10 +1,12 @@
 "use client";
+import { AuthKanabanBoard } from "@/KanabanProvider/KanabanProvider";
 import { Button, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import toast from "react-hot-toast";
 const Modal = () => {
   let [isOpen, setIsOpen] = useState(false);
+  const { AllDataRefetch } = useContext(AuthKanabanBoard);
 
   function open() {
     setIsOpen(true);
@@ -26,6 +28,7 @@ const Modal = () => {
         allData
       );
       if (resp?.data?.status === 201) {
+        AllDataRefetch();
         toast.success("Task Add Successfully");
       }
       console.log(resp);
