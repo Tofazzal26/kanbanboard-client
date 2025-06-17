@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 const Modal = () => {
   let [isOpen, setIsOpen] = useState(false);
   const { AllDataRefetch } = useContext(AuthKanabanBoard);
+  const [priority, setPriority] = useState("");
 
   function open() {
     setIsOpen(true);
@@ -21,7 +22,8 @@ const Modal = () => {
     const title = e.target.title.value;
     const description = e.target.description.value;
     const dueDate = e.target.dueDate.value;
-    const allData = { title, description, dueDate };
+    const allData = { title, description, dueDate, priority };
+
     try {
       const resp = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/task/taskAdd`,
@@ -31,7 +33,6 @@ const Modal = () => {
         AllDataRefetch();
         toast.success("Task Add Successfully");
       }
-      // console.log(resp);
     } catch (error) {
       // console.log(error);
     }
@@ -84,6 +85,18 @@ const Modal = () => {
                         name="dueDate"
                         className="md:py-[10px] py-2 mt-2 mb-4 px-3 w-full md:px-5 bg-[#f3f4f7] border-[1px] border-[#e5e5e5] outline-none rounded-none"
                       />
+                    </div>
+                    <div>
+                      <select
+                        name="priority"
+                        className="md:py-[10px] py-2 mt-2 mb-4 px-3 w-full md:px-5 bg-[#f3f4f7] border-[1px] border-[#e5e5e5] outline-none rounded-none"
+                        value={priority}
+                        onChange={(e) => setPriority(e.target.value)}
+                      >
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
+                      </select>
                     </div>
                     <div>
                       <label className="text-gray-500 text-lg">

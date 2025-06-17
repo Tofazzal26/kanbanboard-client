@@ -10,36 +10,7 @@ const UpdateTaskModal = ({ taskId }) => {
   let [isOpen, setIsOpen] = useState(false);
   const [task, setTask] = useState(null);
   const { AllDataRefetch } = useContext(AuthKanabanBoard);
-
-  function open() {
-    setIsOpen(true);
-  }
-
-  function close() {
-    setIsOpen(false);
-    setTask(null);
-  }
-
-  const handleTaskUpdate = async (e) => {
-    e.preventDefault();
-    const title = e.target.title.value;
-    const description = e.target.description.value;
-    const dueDate = e.target.dueDate.value;
-    const allData = { title, description, dueDate };
-    try {
-      const resp = await axios.patch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/task/singleTaskUpdate/${taskId}`,
-        allData
-      );
-      if (resp?.data?.status === 200) {
-        AllDataRefetch();
-        toast.success("Task Update Successfully");
-      }
-    } catch (error) {
-      // console.log(error);
-    }
-  };
-
+  const [newPriority, setNewPriority] = useState("");
   useEffect(() => {
     if (isOpen && taskId) {
       const fetchTask = async () => {
@@ -56,7 +27,38 @@ const UpdateTaskModal = ({ taskId }) => {
     }
   }, [isOpen, taskId]);
 
-  const { title, description, dueDate } = task || {};
+  function open() {
+    setIsOpen(true);
+  }
+
+  function close() {
+    setIsOpen(false);
+    setTask(null);
+  }
+
+  const handleTaskUpdate = async (e) => {
+    e.preventDefault();
+    console.log(newPriority);
+    const title = e.target.title.value || task?.title;
+    const description = e.target.description.value || task?.description;
+    const dueDate = e.target.dueDate.value || task?.dueDate;
+    const priority = newPriority || task?.priority;
+    const allData = { title, description, dueDate, priority };
+    try {
+      const resp = await axios.patch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/task/singleTaskUpdate/${taskId}`,
+        allData
+      );
+      if (resp?.data?.status === 200) {
+        AllDataRefetch();
+        toast.success("Task Update Successfully");
+      }
+    } catch (error) {
+      // console.log(error);
+    }
+  };
+
+  const { title, description, dueDate, priority } = task || {};
 
   return (
     <div>
@@ -106,6 +108,18 @@ const UpdateTaskModal = ({ taskId }) => {
                         defaultValue={dueDate}
                         className="md:py-[10px] py-2 mt-2 mb-4 px-3 w-full md:px-5 bg-[#f3f4f7] border-[1px] border-[#e5e5e5] outline-none rounded-none"
                       />
+                    </div>
+                    <div>
+                      <select
+                        name="priority"
+                        className="md:py-[10px] py-2 mt-2 mb-4 px-3 w-full md:px-5 bg-[#f3f4f7] border-[1px] border-[#e5e5e5] outline-none rounded-none"
+                        value={newPriority}
+                        onChange={(e) => setNewPriority(e.target.value)}
+                      >
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
+                      </select>
                     </div>
                     <div>
                       <label className="text-gray-500 text-lg">
