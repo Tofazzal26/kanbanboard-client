@@ -36,12 +36,17 @@ const Header = () => {
               </button>
             </Link>
           </div>
-          <div>
-            <button className="text-lg">
-              <Link href="/" className={path === "/" ? "text-[#57c1ee]" : ""}>
-                Home
-              </Link>
-            </button>
+          <div className="text-lg space-x-2 lg:space-x-4">
+            <Link href="/" className={path === "/" ? "text-[#57c1ee]" : ""}>
+              Home
+            </Link>
+
+            <Link
+              href="/api/contact"
+              className={path === "/api/contact" ? "text-[#57c1ee]" : ""}
+            >
+              Contact
+            </Link>
           </div>
           <div>
             <div>
@@ -70,6 +75,9 @@ const Header = () => {
                     </li>
                     <li>
                       <a>{user?.email}</a>
+                    </li>
+                    <li>
+                      <Link href="/api/my-profile">My Profile</Link>
                     </li>
                     <li>
                       <a>

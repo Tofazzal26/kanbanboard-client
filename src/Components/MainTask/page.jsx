@@ -120,10 +120,10 @@ const MainTask = () => {
                             {...provided.dragHandleProps}
                             className={`p-5 mb-3 rounded-md shadow-md cursor-move ${
                               task.priority === "High"
-                                ? "bg-red-100"
+                                ? "bg-red-50"
                                 : task.priority === "Medium"
-                                ? "bg-yellow-100"
-                                : "bg-green-100"
+                                ? "bg-yellow-50"
+                                : "bg-green-50"
                             }`}
                           >
                             <div className="flex justify-between items-center">
@@ -146,10 +146,10 @@ const MainTask = () => {
                               <span
                                 className={`text-xs font-semibold px-2 py-1 rounded-full ${
                                   task.priority === "High"
-                                    ? "bg-red-500 text-white"
+                                    ? "bg-red-400 text-white"
                                     : task.priority === "Medium"
-                                    ? "bg-yellow-500 text-black"
-                                    : "bg-green-500 text-white"
+                                    ? "bg-yellow-400 text-black"
+                                    : "bg-green-400 text-black"
                                 }`}
                               >
                                 {task.priority}
