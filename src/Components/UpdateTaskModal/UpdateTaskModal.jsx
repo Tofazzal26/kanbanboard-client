@@ -38,7 +38,6 @@ const UpdateTaskModal = ({ taskId }) => {
 
   const handleTaskUpdate = async (e) => {
     e.preventDefault();
-    console.log(newPriority);
     const title = e.target.title.value || task?.title;
     const description = e.target.description.value || task?.description;
     const dueDate = e.target.dueDate.value || task?.dueDate;
