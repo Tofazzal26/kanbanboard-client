@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { AuthKanabanBoard } from "@/KanabanProvider/KanabanProvider";
 import axios from "axios";
@@ -20,8 +20,7 @@ const statusMap = {
   inProgress: "in_progress",
   completed: "completed",
 };
-
-// Priority sorting function
+// this is a first priority task sort function
 const sortByPriority = (tasks) => {
   const priorityOrder = { High: 0, Medium: 1, Low: 2 };
   return tasks?.slice().sort((a, b) => {
@@ -31,19 +30,31 @@ const sortByPriority = (tasks) => {
 
 const MainTask = () => {
   const { AllTask, AllDataRefetch } = useContext(AuthKanabanBoard);
+  // set the locally all task to db for instant status change useEffect
+  const [localTasks, setLocalTasks] = useState([]);
 
+  useEffect(() => {
+    setLocalTasks(AllTask);
+  }, [AllTask]);
+  // fitler the status data by task
   const groupedTasks = {
-    todo: AllTask?.filter((task) => task.status === "todo"),
-    inProgress: AllTask?.filter((task) => task.status === "in_progress"),
-    completed: AllTask?.filter((task) => task.status === "completed"),
+    todo: localTasks?.filter((task) => task.status === "todo"),
+    inProgress: localTasks?.filter((task) => task.status === "in_progress"),
+    completed: localTasks?.filter((task) => task.status === "completed"),
   };
-
+  // this is a task drag and drop function
   const handleDragEnd = async (result) => {
     const { destination, source, draggableId } = result;
     if (!destination || destination.droppableId === source.droppableId) return;
 
     const newStatus = statusMap[destination.droppableId];
-
+    // check the previus and current task status
+    setLocalTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task._id === draggableId ? { ...task, status: newStatus } : task
+      )
+    );
+    // update the drag and drop task status for db
     try {
       await axios.patch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/task/taskStatus/${draggableId}`,
@@ -52,11 +63,11 @@ const MainTask = () => {
       );
       AllDataRefetch();
     } catch (error) {
-      console.error("Update error", error.message);
       toast.error("Failed to update task.");
+      console.error("Update error", error.message);
     }
   };
-
+  // this is a task delete task function
   const handleDeleteTask = async (id) => {
     try {
       Swal.fire({
@@ -69,6 +80,7 @@ const MainTask = () => {
         confirmButtonText: "Yes, delete it!",
       }).then(async (result) => {
         if (result.isConfirmed) {
+          // this is a task delete oparation
           const response = await axios.delete(
             `${process.env.NEXT_PUBLIC_BASE_URL}/task/taskDelete/${id}`
           );
@@ -83,7 +95,7 @@ const MainTask = () => {
         }
       });
     } catch (error) {
-      // error handling
+      toast.error("Delete failed!");
     }
   };
 
@@ -170,7 +182,6 @@ const MainTask = () => {
                       </Draggable>
                     )
                   )}
-
                   {provided.placeholder}
                 </div>
               )}

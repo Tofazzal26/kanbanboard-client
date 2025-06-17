@@ -16,6 +16,7 @@ const Login = () => {
     const email = event.target.email.value;
     const name = event.target.name.value;
     const password = event.target.password.value;
+    // email validation regex
     const isValidEmail = /^.+@.+\..+$/.test(email);
     if (!isValidEmail) {
       return toast.error("Invalid email format");
@@ -27,6 +28,7 @@ const Login = () => {
     setLoading(true);
     const userData = { email, password, name };
     try {
+      // user login data send to database
       const resp = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/login/validation`,
         userData,
@@ -36,6 +38,7 @@ const Login = () => {
         return toast.error("Please enter a valid email and password");
       }
       if (resp?.data?.status === 201 || resp?.data?.status === 200) {
+        // user login jwt session add
         const res = await axios.post(
           `${process.env.NEXT_PUBLIC_BASE_URL}/jwt`,
           { email, name },

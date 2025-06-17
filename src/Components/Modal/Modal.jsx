@@ -16,7 +16,7 @@ const Modal = () => {
   function close() {
     setIsOpen(false);
   }
-
+  // this is a task add function
   const handleSubmitTask = async (e) => {
     e.preventDefault();
     const title = e.target.title.value;
@@ -25,6 +25,7 @@ const Modal = () => {
     const allData = { title, description, dueDate, priority };
 
     try {
+      // send the task data for db
       const resp = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/task/taskAdd`,
         allData

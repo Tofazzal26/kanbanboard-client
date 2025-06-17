@@ -9,6 +9,7 @@ import React, { useContext } from "react";
 const Header = () => {
   const { user, setUser, loading } = useContext(AuthKanabanBoard);
   const path = usePathname();
+  // is a user logout function
   const handleLogout = async () => {
     await axios.post(
       `${process.env.NEXT_PUBLIC_BASE_URL}/logout`,

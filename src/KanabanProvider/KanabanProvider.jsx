@@ -11,6 +11,7 @@ const KanabanProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
+    // get the user data by the database
     const fetchUser = async () => {
       try {
         const res = await axios.get(
@@ -22,9 +23,9 @@ const KanabanProvider = ({ children }) => {
         setUser(res.data.user);
       } catch (err) {
         if (err.response && err.response.status === 401) {
-          console.warn("Unauthorized. Logging out...");
+          // console.warn("Unauthorized. Logging out...");
         } else {
-          console.error("User fetch error:", err.message);
+          // console.error("User fetch error:", err.message);
         }
         setUser(null);
       }
@@ -32,7 +33,7 @@ const KanabanProvider = ({ children }) => {
 
     fetchUser();
   }, []);
-
+  // fetch the all task data
   const { refetch: AllDataRefetch, data: AllTask = [] } = useQuery({
     queryKey: ["AllTask"],
     queryFn: async () => {
@@ -42,7 +43,7 @@ const KanabanProvider = ({ children }) => {
       return resp?.data?.data;
     },
   });
-
+  // share the all function and data children components
   const allData = {
     user,
     setUser,

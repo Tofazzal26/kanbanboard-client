@@ -11,7 +11,7 @@ const UpdateTaskModal = ({ taskId }) => {
   const [task, setTask] = useState(null);
   const [newPriority, setNewPriority] = useState("");
   const { AllDataRefetch } = useContext(AuthKanabanBoard);
-
+  // this is a not call for the modal is open or task id
   useEffect(() => {
     if (isOpen && taskId) {
       const fetchTask = async () => {
@@ -21,7 +21,7 @@ const UpdateTaskModal = ({ taskId }) => {
           );
           setTask(res?.data?.data);
         } catch (err) {
-          console.error("Error fetching task", err);
+          // console.error("Error fetching task", err);
         }
       };
       fetchTask();
@@ -36,7 +36,7 @@ const UpdateTaskModal = ({ taskId }) => {
   };
 
   const { title, description, dueDate, priority: taskPriority } = task || {};
-
+  // this is a task update functon
   const handleTaskUpdate = async (e) => {
     e.preventDefault();
     const titleValue = e.target.title.value.trim();
@@ -49,21 +49,21 @@ const UpdateTaskModal = ({ taskId }) => {
       dueDate: dueDateValue !== "" ? dueDateValue : dueDate,
       priority: newPriority !== "" ? newPriority : taskPriority,
     };
-    console.log(updatedTask, "updateTask");
+    // console.log(updatedTask, "updateTask");
 
     try {
+      // this is call the backend task update oparation
       const resp = await axios.patch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/task/singleTaskUpdate/${taskId}`,
         updatedTask
       );
-      console.log(resp);
       if (resp?.data?.status === 200) {
         AllDataRefetch();
         toast.success("Task updated successfully");
         close();
       }
     } catch (error) {
-      console.error("Task update failed", error);
+      // console.error("Task update failed", error);
       toast.error("Failed to update task");
     }
   };
